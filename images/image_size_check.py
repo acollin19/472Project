@@ -11,6 +11,7 @@ def find_smallest_resolution(directories=[]):
     sorted_heights = []
     avg_height = None
     avg_width = None
+    formats = []
     for directory in directories:
         for filename in os.listdir(directory):
             f = os.path.join(directory, filename)
@@ -28,8 +29,19 @@ def find_smallest_resolution(directories=[]):
                 sorted_heights.append((image.height, f))
                 sorted_widths.append((image.width, f))
 
-    avg_height = avg_height/len(sorted_heights)
-    avg_width = avg_width/len(sorted_widths)
+                found_format = False
+                for f in formats:
+                    if f[0] == image.format:
+                        index = formats.index(f)
+                        f = (image.format, f[1] + 1)
+                        formats[index] = f
+                        found_format = True
+
+                if not found_format:
+                    formats.append((image.format, 1))
+
+    avg_height = avg_height / len(sorted_heights)
+    avg_width = avg_width / len(sorted_widths)
 
     sorted_heights.sort()
     sorted_widths.sort()
@@ -40,7 +52,8 @@ def find_smallest_resolution(directories=[]):
     print('Max width = {max_width}\nMax height = {max_height}'.format(max_width=max(sorted_widths),
                                                                       max_height=max(sorted_heights)))
     print('Average width = {avg_width}\nAverage height = {avg_height}'.format(avg_width=avg_height,
-                                                                      avg_height=avg_width))
+                                                                              avg_height=avg_width))
+    print('Number of images for each format = {formats}'.format(formats=formats))
     return (avg_width, avg_height)
 
 
