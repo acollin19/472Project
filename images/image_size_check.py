@@ -9,38 +9,39 @@ def find_smallest_resolution(directories=[]):
 
     sorted_widths = []
     sorted_heights = []
-    min_height = None
-    min_width = None
+    avg_height = None
+    avg_width = None
     for directory in directories:
         for filename in os.listdir(directory):
             f = os.path.join(directory, filename)
             # Check if it is a file
             if os.path.isfile(f):
                 image = Image.open(f)
-                if min_height is None:
-                    min_height = (image.height, f)
-                if min_width is None:
-                    min_width = (image.width, f)
+                if avg_height is None:
+                    avg_height = image.height
+                if avg_width is None:
+                    avg_width = image.width
 
-                if image.height < min_height[0]:
-                    min_height = (image.height, f)
-                if image.width < min_width[0]:
-                    min_width = (image.width, f)
+                avg_height += image.height
+                avg_width += image.width
+
                 sorted_heights.append((image.height, f))
                 sorted_widths.append((image.width, f))
 
+    avg_height = avg_height/len(sorted_heights)
+    avg_width = avg_width/len(sorted_widths)
+
     sorted_heights.sort()
     sorted_widths.sort()
-    # print(max(sorted_heights))
-    # print(min(sorted_heights))
-    # print(max(sorted_widths))
-    # print(min(sorted_widths))
+
     print('Number of images = {len}'.format(len=len(sorted_heights)))
     print('Min width = {min_width}\nMin height = {min_height}'.format(min_width=min(sorted_widths),
                                                                       min_height=min(sorted_heights)))
     print('Max width = {max_width}\nMax height = {max_height}'.format(max_width=max(sorted_widths),
                                                                       max_height=max(sorted_heights)))
-    return (min_width, min_height)
+    print('Average width = {avg_width}\nAverage height = {avg_height}'.format(avg_width=avg_height,
+                                                                      avg_height=avg_width))
+    return (avg_width, avg_height)
 
 
 if __name__ == '__main__':
