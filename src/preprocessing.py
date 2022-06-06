@@ -1,7 +1,6 @@
 # Preprocessing, loading & analyzing the datasets
 
 # Import PyTorch libraries
-import matplotlib
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -11,6 +10,7 @@ import torch.nn.functional as F
 
 import numpy as np
 import pandas as pd
+import matplotlib
 from matplotlib import image as mp_image
 import matplotlib.pyplot as plt
 # %matplotlib inline
@@ -26,57 +26,75 @@ import os
 img_folder = '../images'
 
 # All images are 128x128 pixels
-img_size = (250, 250)
+img_size = (320, 320)
 num_workers = 2
 batch_size = 20
 
-# Sorted list of subfolders for each class
+# Sorted list of sub directories for each class
 all_classes = sorted(os.listdir(img_folder))
 
-# #convert to jpg
-# for root, folders, files in os.walk(img_folder):
-#     for directories in folders:
-#         file_names = os.listdir(os.path.join(root, directories))
-#         for file_name in file_names:
-#             file_path = os.path.join(root, directories, file_name)
-#             if os.path.isfile(file_path):
-#                 image = Image.open(file_path)
-#                 rgb_img = image.convert('RGB').save(file_path)
+# CONVERT TO JPEG
+for root, folders, files in os.walk(img_folder):
+    for directories in folders:
+        file_names = os.listdir(os.path.join(root, directories))
+        for file_name in file_names:
+            file_path = os.path.join(root, directories, file_name)
+            if os.path.isfile(file_path):
+                if not file_path.endswith(".jpeg"):
+                    image = Image.open(file_path)
+                    fn, fext = os.path.splitext(file_path)
+                    conv_img = image.convert('RGB')
+                    conv_img.save('{}.jpeg'.format(fn))
+                    print("file_path ", file_path)
+                    os.remove(file_path)
 
 
-def resize_image(src_image, size=(250, 250), bg_color="white"):
-    # resize the image so the longest dimension matches our target size
-    src_image.thumbnail(size, Image.ANTIALIAS)
-
-    # Create a new square background image
-    new_image = Image.new("RGB", size, bg_color)
-
-    # Paste the resized image into the center of the square background
-    new_image.paste(src_image, (int((size[0] - src_image.size[0]) / 2), int((size[1] - src_image.size[1]) / 2)))
-
+# RESIZE FUNCTION
+def resize_image(src_image):
+    basewidth = 320
+    percent = (basewidth / float(src_image.size[0]))
+    # height_size = int((float(src_image.size[1]) * float(percent)))
+    height_size = 320
+    new_image = src_image.resize((basewidth, height_size), Image.ANTIALIAS)
     return new_image
 
 
-# create output folder if it doesn't exist
+# def resize_image(src_image, size=(320, 320), bg_color="white"):
+#     # resize the image so the longest dimension matches our target size
+#     src_image.thumbnail(size, Image.ANTIALIAS)
+#
+#     # Create a new square background image
+#     new_image = Image.new("RGB", size, bg_color)
+#
+#     # Paste the resized image into the center of the square background
+#     new_image.paste(src_image, (int((size[0] - src_image.size[0]) / 2), int((size[1] - src_image.size[1]) / 2)))
+#
+#     return new_image
+
+
+# CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 resized_img = '../resized_images'
 if os.path.exists(resized_img):
     shutil.rmtree(resized_img)
 
+# RESIZE AND SAVE IMAGES
 for root, folders, files in os.walk(img_folder):
     for directories in folders:
-        outputFolder = os.path.join(resized_img, directories)
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
-        # Loop through the files in the directories
+        output_folder = os.path.join(resized_img, directories)
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        # store image names in list
         file_names = os.listdir(os.path.join(root, directories))
+        # loop through all images
         for file_name in file_names:
-            # Open the file
+            # Open the file in path
             file_path = os.path.join(root, directories, file_name)
-            image = Image.open(file_path)
-            # Create a resized version and save it
-            resized_image = resize_image(image, img_size)
-            saveAs = os.path.join(outputFolder, file_name)
-            resized_image.save(saveAs)
+            img = Image.open(file_path)
+            # Resize images and save in new directory
+            # rsz_img = resize_image(img, img_size)
+            rsz_img = resize_image(img)
+            save_img = os.path.join(output_folder, file_name)
+            rsz_img.save(save_img)
 
 
 def pre_processing(data_path):
@@ -126,11 +144,11 @@ def pre_processing(data_path):
 # train_loader, test_loader = pre_processing(img_folder)
 dataset = pre_processing(resized_img)
 
-# Split training/ testing (75% / 25%)
+# training/ testing sizes (75% / 25%)
 train_size = int(0.75 * len(dataset))
 test_size = len(dataset) - train_size
 
-# use torch.utils.data.random_split for training/test split
+# split training/test
 train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
 
 # TRAINING LOADER
