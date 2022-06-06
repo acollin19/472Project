@@ -40,8 +40,8 @@ def find_smallest_resolution(directories=[]):
                 if not found_format:
                     formats.append((image.format, 1))
 
-    avg_height = avg_height / len(sorted_heights)
-    avg_width = avg_width / len(sorted_widths)
+    avg_height = round(avg_height / len(sorted_heights))
+    avg_width = round(avg_width / len(sorted_widths))
 
     sorted_heights.sort()
     sorted_widths.sort()
@@ -61,5 +61,6 @@ if __name__ == '__main__':
     v = sys.version_info
     print('Python version: {v0}.{v1}.{v2}'.format(v0=v[0], v1=v[1], v2=v[2]))
 
-    directories = ['ClothMask', 'N95Mask', 'SurgicalMask', 'NoMask']
+    directories = ['../resized_images/ClothMask', '../resized_images/N95Mask', '../resized_images/SurgicalMask', '../resized_images/NoMask']
+    # directories = ['ClothMask', 'N95Mask', 'SurgicalMask', 'NoMask']
     find_smallest_resolution(directories)
