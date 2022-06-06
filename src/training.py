@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data as td
 
-from preprocessing import train_loader, test_loader
+import preprocessing
 
 
 class CNN(nn.Module):
@@ -37,7 +37,7 @@ class CNN(nn.Module):
             nn.Linear(1000, 512),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.1),
-            nn.Linear(512, 10)
+            nn.Linear(in_features=80*80*640, out_features=4)
         )
 
     def forward(self, x):
@@ -55,11 +55,7 @@ def cnn():
     num_epochs = 4
     num_classes = 4
     learning_rate = 0.001
-
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
+    train_loader, test_loader = preprocessing.pre_processing('../resized_images')
     classes = ('no_mask', 'cloth_mask', 'surgical_mask', 'n95_mask')
 
     model = CNN()
