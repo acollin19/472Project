@@ -32,6 +32,7 @@ batch_size = 20
 
 # Sorted list of sub directories for each class
 all_classes = sorted(os.listdir(img_folder))
+print("classes ", all_classes)
 
 # CONVERT TO JPEG
 for root, folders, files in os.walk(img_folder):
@@ -100,7 +101,6 @@ for root, folders, files in os.walk(img_folder):
 def pre_processing(data_path):
     # normalize data
     transformation = transforms.Compose([
-        # Resize image
         # transforms.Resize((img_size, img_size)),
         transforms.RandomHorizontalFlip(0.5),
         transforms.RandomVerticalFlip(0.3),
@@ -114,55 +114,27 @@ def pre_processing(data_path):
         root=data_path,
         transform=transformation
     )
-    # # Split training/ testing (75% / 25%)
-    # train_size = int(0.75 * len(full_dataset))
-    # test_size = len(full_dataset) - train_size
-    #
-    # # use torch.utils.data.random_split for training/test split
-    # train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
-    #
-    # # loader for training
-    # train_loader = torch.utils.data.DataLoader(
-    #     train_dataset,
-    #     batch_size=20,
-    #     num_workers=2,
-    #     shuffle=True
-    # )
-    #
-    # # loader for testing
-    # test_loader = torch.utils.data.DataLoader(
-    #     test_dataset,
-    #     batch_size=20,
-    #     num_workers=2,
-    #     shuffle=False
-    # )
+    # Split training/ testing (75% / 25%)
+    train_size = int(0.75 * len(full_dataset))
+    test_size = len(full_dataset) - train_size
 
-    # return train_loader, test_loader
-    return full_dataset
+    # use torch.utils.data.random_split for training/test split
+    train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
 
+    # loader for training
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        batch_size=20,
+        num_workers=2,
+        shuffle=True
+    )
 
-# train_loader, test_loader = pre_processing(img_folder)
-dataset = pre_processing(resized_img)
+    # loader for testing
+    test_loader = torch.utils.data.DataLoader(
+        test_dataset,
+        batch_size=20,
+        num_workers=2,
+        shuffle=False
+    )
 
-# training/ testing sizes (75% / 25%)
-train_size = int(0.75 * len(dataset))
-test_size = len(dataset) - train_size
-
-# split training/test
-train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
-
-# TRAINING LOADER
-train_loader = torch.utils.data.DataLoader(
-    train_dataset,
-    batch_size=20,
-    num_workers=2,
-    shuffle=True
-)
-
-# TESTING LOADER
-test_loader = torch.utils.data.DataLoader(
-    test_dataset,
-    batch_size=20,
-    num_workers=2,
-    shuffle=False
-)
+    return train_loader, test_loader
