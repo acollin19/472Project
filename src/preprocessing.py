@@ -1,27 +1,13 @@
 # Preprocessing, loading & analyzing the datasets
 
+import os
+import shutil
+
 # Import PyTorch libraries
 import torch
 import torchvision
 import torchvision.transforms as transforms
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-
-import numpy as np
-import pandas as pd
-import matplotlib
-from matplotlib import image as mp_image
-import matplotlib.pyplot as plt
-# %matplotlib inline
-import seaborn as sns
-from PIL import Image, ImageOps
-
-from sklearn import metrics
-from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.model_selection import train_test_split
-import shutil
-import os
+from PIL import Image
 
 img_folder = '../images'
 
@@ -32,22 +18,23 @@ batch_size = 20
 
 # Sorted list of sub directories for each class
 all_classes = sorted(os.listdir(img_folder))
-print("classes ", all_classes)
+
 
 # CONVERT TO JPEG
-for root, folders, files in os.walk(img_folder):
-    for directories in folders:
-        file_names = os.listdir(os.path.join(root, directories))
-        for file_name in file_names:
-            file_path = os.path.join(root, directories, file_name)
-            if os.path.isfile(file_path):
-                if not file_path.endswith(".jpeg"):
-                    image = Image.open(file_path)
-                    fn, fext = os.path.splitext(file_path)
-                    conv_img = image.convert('RGB')
-                    conv_img.save('{}.jpeg'.format(fn))
-                    print("file_path ", file_path)
-                    os.remove(file_path)
+def convert_to_jpeg():
+    for root, folders, files in os.walk(img_folder):
+        for directories in folders:
+            file_names = os.listdir(os.path.join(root, directories))
+            for file_name in file_names:
+                file_path = os.path.join(root, directories, file_name)
+                if os.path.isfile(file_path):
+                    if not file_path.endswith(".jpeg"):
+                        image = Image.open(file_path)
+                        fn, fext = os.path.splitext(file_path)
+                        conv_img = image.convert('RGB')
+                        conv_img.save('{}.jpeg'.format(fn))
+                        print("file_path ", file_path)
+                        os.remove(file_path)
 
 
 # RESIZE FUNCTION
@@ -74,28 +61,30 @@ def resize_image(src_image):
 
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
-resized_img = '../resized_images'
-if os.path.exists(resized_img):
-    shutil.rmtree(resized_img)
+def resize_save():
+    resized_img = '../resized_images'
+    if os.path.exists(resized_img):
+        shutil.rmtree(resized_img)
 
-# RESIZE AND SAVE IMAGES
-for root, folders, files in os.walk(img_folder):
-    for directories in folders:
-        output_folder = os.path.join(resized_img, directories)
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
-        # store image names in list
-        file_names = os.listdir(os.path.join(root, directories))
-        # loop through all images
-        for file_name in file_names:
-            # Open the file in path
-            file_path = os.path.join(root, directories, file_name)
-            img = Image.open(file_path)
-            # Resize images and save in new directory
-            # rsz_img = resize_image(img, img_size)
-            rsz_img = resize_image(img)
-            save_img = os.path.join(output_folder, file_name)
-            rsz_img.save(save_img)
+    # RESIZE AND SAVE IMAGES
+    for root, folders, files in os.walk(img_folder):
+        for directories in folders:
+            output_folder = os.path.join(resized_img, directories)
+            if not os.path.exists(output_folder):
+                os.makedirs(output_folder)
+            # store image names in list
+            file_names = os.listdir(os.path.join(root, directories))
+            # loop through all images
+            for file_name in file_names:
+                # Open the file in path
+                file_path = os.path.join(root, directories, file_name)
+                if os.path.isfile(file_path):
+                    img = Image.open(file_path)
+                    # Resize images and save in new directory
+                    # rsz_img = resize_image(img, img_size)
+                    rsz_img = resize_image(img)
+                    save_img = os.path.join(output_folder, file_name)
+                    rsz_img.save(save_img)
 
 
 def pre_processing(data_path):
