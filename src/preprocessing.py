@@ -117,7 +117,7 @@ def pre_processing(data_path):
     # loader for training
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
-        batch_size=20,
+        batch_size=64,
         num_workers=2,
         shuffle=True
     )
@@ -125,7 +125,7 @@ def pre_processing(data_path):
     # loader for testing
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
-        batch_size=20,
+        batch_size=1000,
         num_workers=2,
         shuffle=False
     )
