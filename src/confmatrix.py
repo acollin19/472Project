@@ -1,6 +1,7 @@
 import torch
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, f1_score
 import numpy as np
+import matplotlib.pyplot as plt
 from tabulate import tabulate
 from skorch import NeuralNetClassifier
 from torch.utils.data import random_split
@@ -8,7 +9,7 @@ import torch.optim as optim
 import torch.nn as nn
 import training
 import preprocessing
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix
 
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
@@ -40,11 +41,16 @@ def evaluation():
     net.fit(train_dataset, y=y_train)
     y_pred = net.predict(test_dataset)
     y_true = np.array([y for x, y in iter(test_dataset)])
-    # accuracy_score(y_true, y_pred)
-    target_names = preprocessing.get_classes()
-    class_rep = classification_report(y_true, y_pred, target_names=target_names)
-    confusion_matrix(y_true, y_pred, labels=target_names)
-    print("Classification Report ", class_rep)
+    accuracy_score(y_true, y_pred)
+    # target_names = preprocessing.get_classes()
+    # class_rep = classification_report(y_true, y_pred, target_names=target_names)
+    # confusion_matrix(y_true, y_pred, labels=target_names)
+    # print("Classification Report ", class_rep)
+    plot_confusion_matrix(net, test_dataset, y_true.reshape(-1, 1))
+    plt.show()
+    # train_sliceable = SliceDataset(train_dataset)
+    # scores = cross_val_score(net, train_sliceable, y_train, cv=5,
+    #                          scoring="accuracy")
 
 
 if __name__ == '__main__':
