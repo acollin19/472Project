@@ -2,7 +2,7 @@
 
 import os
 import shutil
-
+import sys
 # Import PyTorch libraries
 import torch
 import torchvision
@@ -12,9 +12,9 @@ from PIL import Image
 img_folder = '../images'
 
 # All images are 128x128 pixels
-img_size = (160, 160)
-num_workers = 2
-batch_size = 20
+# img_size = (160, 160)
+# num_workers = 2
+# batch_size = 20
 
 # Sorted list of sub directories for each class
 all_classes = sorted(os.listdir(img_folder))
@@ -39,10 +39,10 @@ def convert_to_jpeg():
 
 # RESIZE FUNCTION
 def resize_image(src_image):
-    basewidth = 160
+    basewidth = 64
     percent = (basewidth / float(src_image.size[0]))
     # height_size = int((float(src_image.size[1]) * float(percent)))
-    height_size = 160
+    height_size = 64
     new_image = src_image.resize((basewidth, height_size), Image.ANTIALIAS)
     return new_image
 
@@ -127,3 +127,8 @@ def pre_processing(data_path):
     )
 
     return train_loader, test_loader
+
+# if __name__ == '__main__':
+#     v = sys.version_info
+#     resize_save()
+
