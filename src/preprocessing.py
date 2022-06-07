@@ -8,8 +8,10 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
+import numpy as np
 
 img_folder = '../images'
+
 
 # All images are 128x128 pixels
 # img_size = (160, 160)
@@ -17,7 +19,9 @@ img_folder = '../images'
 # batch_size = 20
 
 # Sorted list of sub directories for each class
-all_classes = sorted(os.listdir(img_folder))
+def get_classes():
+    all_classes = sorted(os.listdir(img_folder))
+    return all_classes
 
 
 # CONVERT TO JPEG
@@ -126,9 +130,8 @@ def pre_processing(data_path):
         shuffle=False
     )
 
-    return train_loader, test_loader
+    return (train_loader, test_loader), (train_dataset, test_dataset)
 
 # if __name__ == '__main__':
 #     v = sys.version_info
 #     resize_save()
-
