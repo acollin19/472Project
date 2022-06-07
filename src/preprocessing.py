@@ -12,7 +12,7 @@ from PIL import Image
 img_folder = '../images'
 
 # All images are 128x128 pixels
-img_size = (320, 320)
+img_size = (160, 160)
 num_workers = 2
 batch_size = 20
 
@@ -39,10 +39,10 @@ def convert_to_jpeg():
 
 # RESIZE FUNCTION
 def resize_image(src_image):
-    basewidth = 320
+    basewidth = 160
     percent = (basewidth / float(src_image.size[0]))
     # height_size = int((float(src_image.size[1]) * float(percent)))
-    height_size = 320
+    height_size = 160
     new_image = src_image.resize((basewidth, height_size), Image.ANTIALIAS)
     return new_image
 
