@@ -1,11 +1,6 @@
 import sys
 import torch
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.utils.data as td
-
 import preprocessing
 
 
@@ -21,23 +16,23 @@ class CNN(nn.Module):
             nn.LeakyReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
 
-            nn.Conv2d(in_channels=320, out_channels=640, kernel_size=3, padding=1),
-            nn.BatchNorm2d(640),
+            nn.Conv2d(in_channels=320, out_channels=320, kernel_size=3, padding=1),
+            nn.BatchNorm2d(320),
             nn.LeakyReLU(inplace=True),
-            nn.Conv2d(in_channels=640, out_channels=640, kernel_size=3, padding=1),
-            nn.BatchNorm2d(640),
+            nn.Conv2d(in_channels=320, out_channels=320, kernel_size=3, padding=1),
+            nn.BatchNorm2d(320),
             nn.LeakyReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
 
         self.fc_layer = nn.Sequential(
             nn.Dropout(p=0.1),
-            nn.Linear(8 * 8 * 640, 1000),
+            nn.Linear(80 * 80 * 320, 1000),
             nn.ReLU(inplace=True),
-            nn.Linear(1000, 512),
+            nn.Linear(1000, 80*80*320),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.1),
-            nn.Linear(in_features=80*80*640, out_features=4)
+            nn.Linear(in_features=80*80*320, out_features=4)
         )
 
     def forward(self, x):
