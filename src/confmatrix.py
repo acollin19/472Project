@@ -1,15 +1,14 @@
-import torch
+import matplotlib.pyplot as plt
 # from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, f1_score
 import numpy as np
-import matplotlib.pyplot as plt
-from tabulate import tabulate
-from skorch import NeuralNetClassifier
-from torch.utils.data import random_split
-import torch.optim as optim
+import torch
 import torch.nn as nn
-import training
+import torch.optim as optim
+from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay
+from skorch import NeuralNetClassifier
+
 import preprocessing
-from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix, accuracy_score, ConfusionMatrixDisplay
+import training
 
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
@@ -17,7 +16,8 @@ _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_imag
 target_names = preprocessing.get_classes()
 
 torch.manual_seed(0)
-DEVICE = torch.device('cpu')
+device = torch.device('cpu')
+print("Device used to compute the confusion matrix: {device}".format(device=device))
 
 net = NeuralNetClassifier(
     modelB,
@@ -28,7 +28,7 @@ net = NeuralNetClassifier(
     batch_size=128,
     optimizer=optim.Adam,
     criterion=nn.CrossEntropyLoss,
-    device=DEVICE
+    device=device
 )
 
 
