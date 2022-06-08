@@ -65,7 +65,7 @@ class CNN(nn.Module):
 
 def cnn():
     # Parameters that can be tuned
-    num_epochs = 40
+    num_epochs = 50
     num_classes = 4
     learning_rate = 0.001
     loaders, _ = preprocessing.pre_processing('../resized_images')
