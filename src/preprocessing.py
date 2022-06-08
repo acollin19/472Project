@@ -52,18 +52,6 @@ def resize_image(src_image):
     return new_image
 
 
-# def resize_image(src_image, size=(320, 320), bg_color="white"):
-#     # resize the image so the longest dimension matches our target size
-#     src_image.thumbnail(size, Image.ANTIALIAS)
-#
-#     # Create a new square background image
-#     new_image = Image.new("RGB", size, bg_color)
-#
-#     # Paste the resized image into the center of the square background
-#     new_image.paste(src_image, (int((size[0] - src_image.size[0]) / 2), int((size[1] - src_image.size[1]) / 2)))
-#
-#     return new_image
-
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
@@ -95,7 +83,7 @@ def resize_save():
 def pre_processing(data_path):
     # normalize data
     transformation = transforms.Compose([
-        # transforms.Resize(img_size),
+        transforms.Resize(img_size),
         transforms.RandomHorizontalFlip(0.5),
         transforms.RandomVerticalFlip(0.3),
         #transforms.InterpolationMode.BICUBIC,
