@@ -9,7 +9,7 @@ import torch.optim as optim
 import torch.nn as nn
 import training
 import preprocessing
-from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix, accuracy_score, ConfusionMatrixDisplay
 
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
@@ -39,7 +39,8 @@ def evaluation():
     y_true = np.array([y for x, y in iter(test_dataset)])
     accuracy_score(y_true, y_pred)
     print("Class", classification_report(y_true, y_pred, target_names=target_names))
-    plot_confusion_matrix(net, test_dataset, y_true.reshape(-1, 1))
+    #plot_confusion_matrix(net, test_dataset, y_true)
+    ConfusionMatrixDisplay.from_estimator(net, test_dataset, y_true.reshape(-1,1), display_labels=target_names)
     plt.show()
 
 
