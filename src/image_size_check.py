@@ -3,7 +3,9 @@ import os
 import sys
 
 
-def find_smallest_resolution(directories=[]):
+def find_smallest_resolution(directories=None):
+    if directories is None:
+        directories = []
     if not directories:
         return None
 
@@ -58,9 +60,6 @@ def find_smallest_resolution(directories=[]):
 
 
 if __name__ == '__main__':
-    v = sys.version_info
-    print('Python version: {v0}.{v1}.{v2}'.format(v0=v[0], v1=v[1], v2=v[2]))
-
-    directories = ['../resized_images/ClothMask', '../resized_images/N95Mask', '../resized_images/SurgicalMask', '../resized_images/NoMask']
-    # directories = ['ClothMask', 'N95Mask', 'SurgicalMask', 'NoMask']
+    directories = ['../resized_images/ClothMask', '../resized_images/N95Mask', '../resized_images/SurgicalMask',
+                   '../resized_images/NoMask']
     find_smallest_resolution(directories)

@@ -103,10 +103,9 @@ def cnn():
             acc_list.append(correct / total)
 
             if (i + 1) % 10 == 0:
-                print(
-                    'Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'.format(epoch + 1, num_epochs, i + 1,
-                                                                                          total_step, loss.item(),
-                                                                                          (correct / total) * 100))
+                print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
+                      .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(), (correct / total) * 100))
+
     model.eval()
     with torch.no_grad():
         correct = 0
@@ -125,6 +124,4 @@ def cnn():
 
 
 if __name__ == '__main__':
-    v = sys.version_info
-    print('Python version: {v0}.{v1}.{v2}'.format(v0=v[0], v1=v[1], v2=v[2]))
     cnn()

@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-# from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, f1_score
 import numpy as np
 import torch
 import torch.nn as nn
@@ -39,8 +38,8 @@ def evaluation():
     y_true = np.array([y for x, y in iter(test_dataset)])
     accuracy_score(y_true, y_pred)
     print("Class", classification_report(y_true, y_pred, target_names=target_names))
-    #plot_confusion_matrix(net, test_dataset, y_true)
-    ConfusionMatrixDisplay.from_estimator(net, test_dataset, y_true.reshape(-1,1), display_labels=target_names)
+    # plot_confusion_matrix(net, test_dataset, y_true)
+    ConfusionMatrixDisplay.from_estimator(net, test_dataset, y_true.reshape(-1, 1), display_labels=target_names)
     plt.show()
 
 
