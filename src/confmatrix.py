@@ -1,5 +1,5 @@
 import torch
-from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, f1_score
+# from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, f1_score
 import numpy as np
 import matplotlib.pyplot as plt
 from tabulate import tabulate
@@ -9,7 +9,7 @@ import torch.optim as optim
 import torch.nn as nn
 import training
 import preprocessing
-from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix
+from sklearn.metrics import confusion_matrix, classification_report, plot_confusion_matrix, accuracy_score
 
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
@@ -27,7 +27,7 @@ net = NeuralNetClassifier(
     iterator_train__num_workers=4,
     iterator_valid__num_workers=4,
     lr=1e-3,
-    batch_size=128,
+    batch_size=64,
     optimizer=optim.Adam,
     criterion=nn.CrossEntropyLoss,
     device=DEVICE
@@ -81,11 +81,9 @@ def evaluation():
 #     return results
 #
 #
-# confusion_matrix(y_true, y_pred)
+# # confusion_matrix(y_true, y_pred)
 
 
 if __name__ == '__main__':
+    # confusion_matrix(y_true, y_pred)
     evaluation()
-    # true = y_true
-    # predicted = y_pred
-    # confusion_matrix(true, predicted)
