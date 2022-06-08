@@ -1,7 +1,5 @@
-import sys
 import torch
 import torch.nn as nn
-from torch.backends import cudnn
 
 import preprocessing
 
@@ -66,7 +64,6 @@ class CNN(nn.Module):
 def cnn():
     # Parameters that can be tuned
     num_epochs = 50
-    num_classes = 4
     learning_rate = 0.001
     loaders, _ = preprocessing.pre_processing('../resized_images')
     train_loader, test_loader = loaders

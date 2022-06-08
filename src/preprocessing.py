@@ -1,25 +1,18 @@
-# Preprocessing, loading & analyzing the datasets
-
 import os
 import shutil
-import sys
-# Import PyTorch libraries
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
-import numpy as np
 
 img_folder = '../images'
 
-
-# All images are 128x128 pixels
+# All images are 64x64 pixels
 img_size = (64, 64)
-#img_size = 64
-# num_workers = 2
-# batch_size = 20
 
-# Sorted list of sub directories for each class
+
+# Sorted list of subdirectories for each class
 def get_classes():
     all_classes = sorted(os.listdir(img_folder))
     return all_classes
@@ -52,7 +45,6 @@ def resize_image(src_image):
     return new_image
 
 
-
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
     resized_img = '../resized_images'
@@ -65,9 +57,9 @@ def resize_save():
             output_folder = os.path.join(resized_img, directories)
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
-            # store image names in list
+            # Store image names in list
             file_names = os.listdir(os.path.join(root, directories))
-            # loop through all images
+            # Loop through all images
             for file_name in file_names:
                 # Open the file in path
                 file_path = os.path.join(root, directories, file_name)
@@ -81,12 +73,12 @@ def resize_save():
 
 
 def pre_processing(data_path):
-    # normalize data
+    # Normalize data
     transformation = transforms.Compose([
         transforms.Resize(img_size),
         transforms.RandomHorizontalFlip(0.5),
         transforms.RandomVerticalFlip(0.3),
-        #transforms.InterpolationMode.BICUBIC,
+        # transforms.InterpolationMode.BICUBIC,
         # transforms.RandomRotation(20),
         # transforms.RandomResizedCrop(128),
         # transforms.RandomHorizontalFlip(),
@@ -104,10 +96,10 @@ def pre_processing(data_path):
     train_size = int(0.75 * len(full_dataset))
     test_size = len(full_dataset) - train_size
 
-    # use torch.utils.data.random_split for training/test split
+    # Use torch.utils.data.random_split for training/test split
     train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
 
-    # loader for training
+    # Loader for training
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=64,
@@ -115,7 +107,7 @@ def pre_processing(data_path):
         shuffle=True
     )
 
-    # loader for testing
+    # Loader for testing
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=1000,
@@ -124,7 +116,3 @@ def pre_processing(data_path):
     )
 
     return (train_loader, test_loader), (train_dataset, test_dataset)
-
-# if __name__ == '__main__':
-#     v = sys.version_info
-#     resize_save()

@@ -1,6 +1,6 @@
-from PIL import Image
 import os
-import sys
+
+from PIL import Image
 
 
 def find_smallest_resolution(directories=None):
