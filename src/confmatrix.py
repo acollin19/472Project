@@ -14,6 +14,7 @@ from sklearn.metrics import confusion_matrix, classification_report, plot_confus
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
 _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
+target_names = preprocessing.get_classes()
 
 torch.manual_seed(0)
 DEVICE = torch.device('cpu')

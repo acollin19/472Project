@@ -14,7 +14,8 @@ img_folder = '../images'
 
 
 # All images are 128x128 pixels
-# img_size = (160, 160)
+img_size = (64, 64)
+#img_size = 64
 # num_workers = 2
 # batch_size = 20
 
@@ -94,9 +95,13 @@ def resize_save():
 def pre_processing(data_path):
     # normalize data
     transformation = transforms.Compose([
-        # transforms.Resize((img_size, img_size)),
+        # transforms.Resize(img_size),
         transforms.RandomHorizontalFlip(0.5),
         transforms.RandomVerticalFlip(0.3),
+        #transforms.InterpolationMode.BICUBIC,
+        # transforms.RandomRotation(20),
+        # transforms.RandomResizedCrop(128),
+        # transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         # Normalize the pixel values (in R, G, and B channels)
         transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
