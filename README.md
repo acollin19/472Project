@@ -5,8 +5,8 @@ AI Face Detector : Goal is to develop and AI that can analyze face images and de
 ## Group Members
 Angele Park Collin, ID:  40116404\
 Clara Assouline, ID: 40092207\
-Sergio Andres Angulo Ibarra, ID:\
-Timothee Duthoit, ID:
+Sergio Andres Angulo Ibarra, ID: 40134002\
+Timothee Duthoit, ID: 40120801
 
 ## Files Submitted
 
