@@ -35,7 +35,7 @@ Timothee Duthoit, ID: 40120801
 3. Continue to "if not using new dataset".
 
 (If not using new dataset)
-1. Run training.py which calls preprocessing.py to obtain train_loader and test_loader, then trains the data using the layers defined in the cnn class (40 epochs).
+1. Run training.py which calls preprocessing.py to obtain train_loader and test_loader, then trains the data using the layers defined in the cnn class (50 epochs).
    - Saves model into saved_model file
 
 ### Application  
