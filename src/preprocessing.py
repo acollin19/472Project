@@ -116,3 +116,7 @@ def pre_processing(data_path):
     )
 
     return (train_loader, test_loader), (train_dataset, test_dataset)
+
+
+if __name__ == '__main__':
+    resize_save()
