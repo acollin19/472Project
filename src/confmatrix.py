@@ -13,6 +13,8 @@ modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
 _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
 target_names = preprocessing.get_classes()
+if '.DS_Store' in target_names:
+    target_names.remove('.DS_Store')
 
 torch.manual_seed(0)
 device = torch.device('cpu')
