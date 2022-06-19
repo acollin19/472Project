@@ -48,7 +48,7 @@ def evaluation():
     # k-fold
     train_sliceable = SliceDataset(train_dataset)
     scores = cross_val_score(net, train_sliceable, y_train, cv=10, scoring="accuracy")
-
+    print("scores ", scores)
 
 if __name__ == '__main__':
     evaluation()
