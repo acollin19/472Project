@@ -5,6 +5,8 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay
 from skorch import NeuralNetClassifier
+from sklearn.model_selection import KFold, cross_val_score
+from skorch.helper import SliceDataset
 
 import preprocessing
 import training
@@ -43,7 +45,10 @@ def evaluation():
     # plot_confusion_matrix(net, test_dataset, y_true)
     ConfusionMatrixDisplay.from_estimator(net, test_dataset, y_true.reshape(-1, 1), display_labels=target_names)
     plt.show()
-
+    # k-fold
+    train_sliceable = SliceDataset(train_dataset)
+    scores = cross_val_score(net, train_sliceable, y_train, cv=10, scoring="accuracy")
+    print("scores ", scores)
 
 if __name__ == '__main__':
     evaluation()
