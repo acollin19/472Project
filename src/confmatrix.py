@@ -13,7 +13,8 @@ import training
 
 modelB = training.CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
-_, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
+# _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
+_, (train_dataset, test_dataset) = preprocessing.pre_processing('../images_copy')
 target_names = preprocessing.get_classes()
 if '.DS_Store' in target_names:
     target_names.remove('.DS_Store')
@@ -49,6 +50,7 @@ def evaluation():
     train_sliceable = SliceDataset(train_dataset)
     scores = cross_val_score(net, train_sliceable, y_train, cv=10, scoring="accuracy")
     print("scores ", scores)
+
 
 if __name__ == '__main__':
     evaluation()
