@@ -15,6 +15,8 @@ img_size = (64, 64)
 # Sorted list of subdirectories for each class
 def get_classes(img_path):
     all_classes = sorted(os.listdir(img_path))
+    if '.DS_Store' in all_classes:
+        all_classes.remove('.DS_Store')
     print("ALL CLASSES ", all_classes)
     return all_classes
 

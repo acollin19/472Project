@@ -33,6 +33,8 @@ _, (train_datasetY, test_datasetY) = preprocessing.pre_processing(young_imgs)
 
 torch.manual_seed(0)
 device = torch.device('cpu')
+# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
+# device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
 
 net = NeuralNetClassifier(
@@ -48,67 +50,16 @@ net = NeuralNetClassifier(
 )
 
 
-def evaluation_Female():
-    target_names = preprocessing.get_classes(female_imgs)
-    if '.DS_Store' in target_names:
-        target_names.remove('.DS_Store')
-
-    y_train = np.array([y for x, y in iter(train_datasetF)])
-    net.fit(train_datasetF, y=y_train)
-    y_pred = net.predict(test_datasetF)
-    y_true = np.array([y for x, y in iter(test_datasetF)])
+def evaluation(img_path, train_data, test_data):
+    target_names = preprocessing.get_classes(img_path)
+    y_train = np.array([y for x, y in iter(train_data)])
+    net.fit(train_data, y=y_train)
+    y_pred = net.predict(test_data)
+    y_true = np.array([y for x, y in iter(test_data)])
     accuracy_score(y_true, y_pred)
     print("Class", classification_report(y_true, y_pred, target_names=target_names))
     # plot_confusion_matrix(net, test_dataset, y_true)
-    ConfusionMatrixDisplay.from_estimator(net, test_datasetF, y_true.reshape(-1, 1), display_labels=target_names)
-    plt.show()
-
-
-def evaluation_Male():
-    target_names = preprocessing.get_classes(male_imgs)
-    if '.DS_Store' in target_names:
-        target_names.remove('.DS_Store')
-
-    y_train = np.array([y for x, y in iter(train_datasetM)])
-    net.fit(train_datasetM, y=y_train)
-    y_pred = net.predict(test_datasetM)
-    y_true = np.array([y for x, y in iter(test_datasetM)])
-    accuracy_score(y_true, y_pred)
-    print("Class", classification_report(y_true, y_pred, target_names=target_names))
-    # plot_confusion_matrix(net, test_dataset, y_true)
-    ConfusionMatrixDisplay.from_estimator(net, test_datasetM, y_true.reshape(-1, 1), display_labels=target_names)
-    plt.show()
-
-
-def evaluation_Old():
-    target_names = preprocessing.get_classes(old_imgs)
-    if '.DS_Store' in target_names:
-        target_names.remove('.DS_Store')
-
-    y_train = np.array([y for x, y in iter(train_datasetO)])
-    net.fit(train_datasetO, y=y_train)
-    y_pred = net.predict(test_datasetO)
-    y_true = np.array([y for x, y in iter(test_datasetO)])
-    accuracy_score(y_true, y_pred)
-    print("Class", classification_report(y_true, y_pred, target_names=target_names))
-    # plot_confusion_matrix(net, test_dataset, y_true)
-    ConfusionMatrixDisplay.from_estimator(net, test_datasetO, y_true.reshape(-1, 1), display_labels=target_names)
-    plt.show()
-
-
-def evaluation_Young():
-    target_names = preprocessing.get_classes(young_imgs)
-    if '.DS_Store' in target_names:
-        target_names.remove('.DS_Store')
-
-    y_train = np.array([y for x, y in iter(train_datasetY)])
-    net.fit(train_datasetY, y=y_train)
-    y_pred = net.predict(test_datasetY)
-    y_true = np.array([y for x, y in iter(test_datasetY)])
-    accuracy_score(y_true, y_pred)
-    print("Class", classification_report(y_true, y_pred, target_names=target_names))
-    # plot_confusion_matrix(net, test_dataset, y_true)
-    ConfusionMatrixDisplay.from_estimator(net, test_datasetY, y_true.reshape(-1, 1), display_labels=target_names)
+    ConfusionMatrixDisplay.from_estimator(net, test_data, y_true.reshape(-1, 1), display_labels=target_names)
     plt.show()
 
 
@@ -122,9 +73,8 @@ def k_fold():
 
 
 if __name__ == '__main__':
+    evaluation(female_imgs, train_datasetF, test_datasetF)
+    evaluation(male_imgs, train_datasetM, test_datasetM)
+    evaluation(old_imgs, train_datasetO, test_datasetO)
+    evaluation(young_imgs, train_datasetY, test_datasetY)
     k_fold()
-    evaluation_Female()
-    evaluation_Male()
-    evaluation_Old()
-    evaluation_Young()
-
