@@ -6,7 +6,7 @@ import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
 
-img_folder = '../images'
+img_folder = '../images_copy'
 
 # All images are 64x64 pixels
 img_size = (64, 64)
@@ -15,6 +15,9 @@ img_size = (64, 64)
 # Sorted list of subdirectories for each class
 def get_classes():
     all_classes = sorted(os.listdir(img_folder))
+    sub_classes = sorted(os.listdir((img_folder)))
+    print("ALL CLASSES ", all_classes)
+    print("sub ", sub_classes)
     return all_classes
 
 
@@ -47,16 +50,18 @@ def resize_image(src_image):
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
-    resized_img = '../resized_images'
+    resized_img = '../resized_images_copy'
     if os.path.exists(resized_img):
         shutil.rmtree(resized_img)
 
     # RESIZE AND SAVE IMAGES
     for root, folders, files in os.walk(img_folder):
         for directories in folders:
-            output_folder = os.path.join(resized_img, directories)
+            #output_folder = os.path.join(resized_img, directories)
+            output_folder = root + "/" + directories
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
+
             # Store image names in list
             file_names = os.listdir(os.path.join(root, directories))
             # Loop through all images
@@ -66,7 +71,6 @@ def resize_save():
                 if os.path.isfile(file_path):
                     img = Image.open(file_path)
                     # Resize images and save in new directory
-                    # rsz_img = resize_image(img, img_size)
                     rsz_img = resize_image(img)
                     save_img = os.path.join(output_folder, file_name)
                     rsz_img.save(save_img)
@@ -120,3 +124,4 @@ def pre_processing(data_path):
 
 if __name__ == '__main__':
     resize_save()
+    #get_classes()
