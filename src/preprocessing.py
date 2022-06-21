@@ -13,8 +13,8 @@ img_size = (64, 64)
 
 
 # Sorted list of subdirectories for each class
-def get_classes():
-    all_classes = sorted(os.listdir(img_folder))
+def get_classes(img_path):
+    all_classes = sorted(os.listdir(img_path))
     print("ALL CLASSES ", all_classes)
     return all_classes
 
