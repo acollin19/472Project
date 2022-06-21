@@ -9,9 +9,9 @@ from sklearn.model_selection import KFold, cross_val_score
 from skorch.helper import SliceDataset
 
 import preprocessing
-import training
+from cnn import CNN
 
-modelB = training.CNN()
+modelB = CNN()
 modelB.load_state_dict(torch.load('saved_model'), strict=False)
 
 all_imgs = '../images_copy'
@@ -27,13 +27,16 @@ _, (train_datasetM, test_datasetM) = preprocessing.pre_processing(male_imgs)
 _, (train_datasetO, test_datasetO) = preprocessing.pre_processing(old_imgs)
 _, (train_datasetY, test_datasetY) = preprocessing.pre_processing(young_imgs)
 
-# target_names = preprocessing.get_classes()
-# if '.DS_Store' in target_names:
-#     target_names.remove('.DS_Store')
-
 torch.manual_seed(0)
-device = torch.device('cpu')
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
+
+"""
+In order to use mps on M1 Macs the following if statement needs to be added in the file skorch/utils.py around
+line 140 after the if X.is_cuda: X = X.cpu() statement
+if X.is_mps:
+    X = X.cpu()
+Also a nightly version of pytorch is required
+"""
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
 # device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
 
