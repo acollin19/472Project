@@ -13,8 +13,11 @@ img_size = (64, 64)
 
 
 # Sorted list of subdirectories for each class
-def get_classes():
-    all_classes = sorted(os.listdir(img_folder))
+def get_classes(img_path):
+    all_classes = sorted(os.listdir(img_path))
+    if '.DS_Store' in all_classes:
+        all_classes.remove('.DS_Store')
+    print("ALL CLASSES ", all_classes)
     return all_classes
 
 
@@ -56,9 +59,11 @@ def resize_save():
     # RESIZE AND SAVE IMAGES
     for root, folders, files in os.walk(img_folder):
         for directories in folders:
-            output_folder = os.path.join(resized_img, directories)
+            # output_folder = os.path.join(resized_img, directories)
+            output_folder = root + "/" + directories
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
+
             # Store image names in list
             file_names = os.listdir(os.path.join(root, directories))
             # Loop through all images
@@ -69,8 +74,7 @@ def resize_save():
                 file_path = os.path.join(root, directories, file_name)
                 if os.path.isfile(file_path):
                     img = Image.open(file_path)
-                    # Resize images and save in new directory
-                    # rsz_img = resize_image(img, img_size)
+                    # Resize images and save in directory
                     rsz_img = resize_image(img)
                     save_img = os.path.join(output_folder, file_name)
                     rsz_img.save(save_img)
