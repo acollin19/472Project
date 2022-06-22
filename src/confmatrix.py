@@ -8,6 +8,7 @@ from sklearn.metrics import classification_report, accuracy_score, ConfusionMatr
 from sklearn.model_selection import cross_val_score, cross_validate, KFold
 from skorch import NeuralNetClassifier
 from skorch.helper import SliceDataset
+from k_fold import k_fold_new
 
 import preprocessing
 from cnn import CNN
@@ -67,32 +68,39 @@ def evaluation(img_path, train_data, test_data):
 
 
 def k_fold():
-    k_train = np.array([y for x, y in iter(train_dataset)])
-    net.fit(train_dataset, y=k_train)
+    results = k_fold_new()
+    counter = 0
+    for result in results:
+        print("KFold: " + str(result) + "[" + str(result[0]) + " " + str(result[1]) + " " + str(result[2]) +
+              " " + str(result[3]) + "]")
+    counter+=1
 
-    # macro or weighted
-    scoring = {'accuracy': make_scorer(accuracy_score),
-               'precision': make_scorer(precision_score, average='weighted', zero_division=1),
-               'recall': make_scorer(recall_score, average='weighted', zero_division=1),
-               'f1_score': make_scorer(f1_score, average='weighted', zero_division=1)}
-    # k-fold
-    train_sliceable = SliceDataset(train_dataset)
-    kfold = KFold(n_splits=10, shuffle=True, random_state=10)
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
-    scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
-    print("All scores ", scores)
-
-    # aggregate values ?
-    print("Accuracy Mean ", (np.mean(scores['test_accuracy']))*100)
-    print("Precision Mean", (np.mean(scores['test_precision']))*100)
-    print("Recall Mean", (np.mean(scores['test_recall']))*100)
-    print("F1 Mean", (np.mean(scores['test_f1_score']))*100)
+    # k_train = np.array([y for x, y in iter(train_dataset)])
+    # net.fit(train_dataset, y=k_train)
+    #
+    # # macro or weighted
+    # scoring = {'accuracy': make_scorer(accuracy_score),
+    #            'precision': make_scorer(precision_score, average='weighted', zero_division=1),
+    #            'recall': make_scorer(recall_score, average='weighted', zero_division=1),
+    #            'f1_score': make_scorer(f1_score, average='weighted', zero_division=1)}
+    # # k-fold
+    # train_sliceable = SliceDataset(train_dataset)
+    # kfold = KFold(n_splits=10, shuffle=True, random_state=10)
+    # # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
+    # # scores = cross_val_score(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
+    # scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
+    # print("All scores ", scores)
+    #
+    # # aggregate values ?
+    # print("Accuracy Mean ", (np.mean(scores['test_accuracy']))*100)
+    # print("Precision Mean", (np.mean(scores['test_precision']))*100)
+    # print("Recall Mean", (np.mean(scores['test_recall']))*100)
+    # print("F1 Mean", (np.mean(scores['test_f1_score']))*100)
 
 
 if __name__ == '__main__':
-    evaluation(female_imgs, train_datasetF, test_datasetF)
-    evaluation(male_imgs, train_datasetM, test_datasetM)
-    evaluation(old_imgs, train_datasetO, test_datasetO)
-    evaluation(young_imgs, train_datasetY, test_datasetY)
+    # evaluation(female_imgs, train_datasetF, test_datasetF)
+    # evaluation(male_imgs, train_datasetM, test_datasetM)
+    # evaluation(old_imgs, train_datasetO, test_datasetO)
+    # evaluation(young_imgs, train_datasetY, test_datasetY)
     k_fold()
