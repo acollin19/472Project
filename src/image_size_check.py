@@ -18,6 +18,8 @@ def find_smallest_resolution(directories=None):
         for filename in os.listdir(directory):
             f = os.path.join(directory, filename)
             # Check if it is a file
+            if '.DS_Store' in filename:
+                continue
             if os.path.isfile(f):
                 image = Image.open(f)
                 if avg_height is None:
@@ -60,6 +62,6 @@ def find_smallest_resolution(directories=None):
 
 
 if __name__ == '__main__':
-    directories = ['../resized_images/ClothMask', '../resized_images/N95Mask', '../resized_images/SurgicalMask',
-                   '../resized_images/NoMask']
+    directories = ['../new_images_all/ClothMask', '../new_images_all/N95Mask', '../new_images_all/SurgicalMask',
+                   '../new_images_all/NoMask']
     find_smallest_resolution(directories)

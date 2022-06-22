@@ -6,15 +6,18 @@ import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
 
-img_folder = '../images'
+img_folder = '../new_images_all'
 
 # All images are 64x64 pixels
 img_size = (64, 64)
 
 
 # Sorted list of subdirectories for each class
-def get_classes():
-    all_classes = sorted(os.listdir(img_folder))
+def get_classes(img_path):
+    all_classes = sorted(os.listdir(img_path))
+    if '.DS_Store' in all_classes:
+        all_classes.remove('.DS_Store')
+    print("ALL CLASSES ", all_classes)
     return all_classes
 
 
@@ -24,6 +27,8 @@ def convert_to_jpeg():
         for directories in folders:
             file_names = os.listdir(os.path.join(root, directories))
             for file_name in file_names:
+                if '.DS_Store' in file_name:
+                    continue
                 file_path = os.path.join(root, directories, file_name)
                 if os.path.isfile(file_path):
                     if not file_path.endswith(".jpeg"):
@@ -47,26 +52,29 @@ def resize_image(src_image):
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
-    resized_img = '../resized_images'
+    resized_img = '../resized_new_images_all'
     if os.path.exists(resized_img):
         shutil.rmtree(resized_img)
 
     # RESIZE AND SAVE IMAGES
     for root, folders, files in os.walk(img_folder):
         for directories in folders:
-            output_folder = os.path.join(resized_img, directories)
+            # output_folder = os.path.join(resized_img, directories)
+            output_folder = root + "/" + directories
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
+
             # Store image names in list
             file_names = os.listdir(os.path.join(root, directories))
             # Loop through all images
             for file_name in file_names:
+                if '.DS_Store' in file_name:
+                    continue
                 # Open the file in path
                 file_path = os.path.join(root, directories, file_name)
                 if os.path.isfile(file_path):
                     img = Image.open(file_path)
-                    # Resize images and save in new directory
-                    # rsz_img = resize_image(img, img_size)
+                    # Resize images and save in directory
                     rsz_img = resize_image(img)
                     save_img = os.path.join(output_folder, file_name)
                     rsz_img.save(save_img)
