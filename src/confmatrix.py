@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay, make_scorer, \
     precision_score, recall_score, f1_score
-from sklearn.model_selection import cross_val_score, cross_validate
+from sklearn.model_selection import cross_val_score, cross_validate, KFold
 from skorch import NeuralNetClassifier
 from skorch.helper import SliceDataset
 
@@ -75,10 +75,11 @@ def k_fold():
                'f1_score': make_scorer(f1_score, average='micro')}
     # k-fold
     train_sliceable = SliceDataset(train_dataset)
+    kfold = KFold(n_splits=10, shuffle=True, random_state=10)
     # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
     # scores = cross_val_score(net, train_sliceable, k_train, cv=2, scoring=scoring)
     # avg_scores = scores.mean()
-    scores = cross_validate(net, train_sliceable, k_train, cv=10, scoring=scoring)
+    scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
 
     print("All scores ", scores)
 
