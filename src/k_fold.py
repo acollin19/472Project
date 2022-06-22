@@ -6,12 +6,10 @@ from sklearn.metrics import classification_report, accuracy_score, ConfusionMatr
 from torch.utils.data import DataLoader, ConcatDataset
 import preprocessing
 from cnn import CNN
+from skorch import NeuralNetClassifier
+import torch.optim as optim
 
 all_imgs = '../images_copy'
-female_imgs = '../images_copy/Female'
-male_imgs = '../images_copy/Male'
-old_imgs = '../images_copy/Old'
-young_imgs = '../images_copy/Young'
 
 _, (train_dataset, test_dataset) = preprocessing.pre_processing(all_imgs)
 dataset = ConcatDataset([train_dataset, test_dataset])
@@ -26,11 +24,25 @@ num_folds = 2
 results = {}
 eval_res = []
 
+net = NeuralNetClassifier(
+    modelB,
+    max_epochs=1,
+    iterator_train__num_workers=0,
+    iterator_valid__num_workers=0,
+    lr=1e-3,
+    batch_size=128,
+    optimizer=optim.Adam,
+    criterion=nn.CrossEntropyLoss,
+    #device=device
+)
+
 
 def k_fold_new():
     kfold = KFold(n_splits=num_folds, shuffle=True, random_state=10)
     # for fold, (train_ids, test_ids) in enumerate(kfold.split(train_dataset)):
     for fold, (train_ids, test_ids) in enumerate(kfold.split(dataset)):
+
+        print('Begin K-fold')
 
         train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
         test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
@@ -38,6 +50,7 @@ def k_fold_new():
         trainloader = torch.utils.data.DataLoader(dataset, batch_size=32, sampler=train_subsampler)
         testloader = torch.utils.data.DataLoader(dataset, batch_size=32, sampler=test_subsampler)
 
+        print('Starting training')
         # train
         for epoch in range(0, num_epochs):
             current_loss = 0.0
@@ -66,39 +79,31 @@ def k_fold_new():
                 # Get inputs
                 inputs, target = data
 
-                # Generate outputs
+                # pass input data to get output from model
                 outputs = modelB(inputs)
 
-                # Set total and correct
+                # calculated predicted value
                 _, predicted = torch.max(outputs.data, 1)
                 total += target.size(0)
                 correct += (predicted == target).sum().item()
 
+            results[fold] = 100.0 * (correct / total)
             precision = precision_score(target, predicted, average="weighted", zero_division=1)
             recall = recall_score(target, predicted, average="weighted", zero_division=1)
             f1 = f1_score(target, predicted, average="weighted", zero_division=1)
             accuracy = accuracy_score(target, predicted)
             eval_res.append([precision, recall, f1, accuracy])
-            results[fold] = 100.0 * (correct / total)
 
-            print('Accuracy for fold %d: %d %%' % (fold, 100.0 * correct / total))
+            print(f'\nFOLD {fold} RESULTS')
+            print('Manual Accuracy for fold %d: %d %%' % (fold, 100.0 * correct / total))
             print('Precision for fold %d: %d %%' % (fold, precision * 100))
             print('Recall for fold %d: %d %%' % (fold, 100.0 * recall))
-            print('Other Accuracy for fold %d: %d %%' % (fold, 100.0 * accuracy))
+            print('Accuracy for fold %d: %d %%' % (fold, 100.0 * accuracy))
             print('F1 for fold %d: %d %%' % (fold, 100.0 * f1))
 
-        # Print fold results
-        print(f'K-FOLD CROSS VALIDATION RESULTS FOR {num_folds} FOLDS')
-        print('--------------------------------')
-        res_sum = 0.0
-        for key, value in results.items():
-            print(f'Fold {key}: {value} %')
-            res_sum += value
-        print(f'Average Accuracy: {res_sum / len(results.items())} %')
-
-        # Saving the model
-        save_path = f'./model-K-fold-{fold}.pth'
-        torch.save(modelB.state_dict(), save_path)
+        # # Saving the model
+        # save_path = f'./model-K-fold-{fold}.pth'
+        # torch.save(modelB.state_dict(), save_path)
     return eval_res
 
 
