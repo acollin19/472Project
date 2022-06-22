@@ -24,7 +24,6 @@ male_imgs = '../images_copy_new/Male'
 old_imgs = '../images_copy_new/Old'
 young_imgs = '../images_copy_new/Young'
 
-# _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
 _, (train_dataset, test_dataset) = preprocessing.pre_processing(all_imgs)
 _, (train_datasetF, test_datasetF) = preprocessing.pre_processing(female_imgs)
 _, (train_datasetM, test_datasetM) = preprocessing.pre_processing(male_imgs)
@@ -40,8 +39,8 @@ if X.is_mps:
     X = X.cpu()
 Also a nightly version of pytorch is required
 """
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
-device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
+# device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
 
 modelB = CNN()
@@ -98,8 +97,8 @@ def k_fold():
 
 if __name__ == '__main__':
     evaluation(all_imgs, train_dataset, test_dataset)
-    # evaluation(female_imgs, train_datasetF, test_datasetF)
-    # evaluation(male_imgs, train_datasetM, test_datasetM)
-    # evaluation(old_imgs, train_datasetO, test_datasetO)
-    # evaluation(young_imgs, train_datasetY, test_datasetY)
-    # k_fold()
+    evaluation(female_imgs, train_datasetF, test_datasetF)
+    evaluation(male_imgs, train_datasetM, test_datasetM)
+    evaluation(old_imgs, train_datasetO, test_datasetO)
+    evaluation(young_imgs, train_datasetY, test_datasetY)
+    k_fold()

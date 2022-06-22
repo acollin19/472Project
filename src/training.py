@@ -13,8 +13,8 @@ def training():
     loaders, _ = preprocessing.pre_processing('../resized_images_init')
     train_loader, test_loader = loaders
 
-    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For Windows (will use cpu on macs)
-    device = torch.device('mps' if torch.has_mps else 'cpu')  # For Mac (M1 Macs only with nightly version of pytorch)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For Windows (will use cpu on macs)
+    # device = torch.device('mps' if torch.has_mps else 'cpu')  # For Mac (M1 Macs only with nightly version of pytorch)
     print("Device used to train the model: {device}".format(device=device))
 
     model = CNN().to(device)
