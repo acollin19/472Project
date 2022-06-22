@@ -62,6 +62,6 @@ def find_smallest_resolution(directories=None):
 
 
 if __name__ == '__main__':
-    directories = ['../new_images/ClothMask', '../new_images/N95Mask', '../new_images/SurgicalMask',
-                   '../new_images/NoMask']
+    directories = ['../new_images_all/ClothMask', '../new_images_all/N95Mask', '../new_images_all/SurgicalMask',
+                   '../new_images_all/NoMask']
     find_smallest_resolution(directories)

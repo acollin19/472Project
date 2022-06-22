@@ -12,11 +12,17 @@ from skorch.helper import SliceDataset
 import preprocessing
 from cnn import CNN
 
-all_imgs = '../images_copy'
-female_imgs = '../images_copy/Female'
-male_imgs = '../images_copy/Male'
-old_imgs = '../images_copy/Old'
-young_imgs = '../images_copy/Young'
+# all_imgs = '../resized_images_init'
+# female_imgs = '../images_copy_init/Female'
+# male_imgs = '../images_copy_init/Male'
+# old_imgs = '../images_copy_init/Old'
+# young_imgs = '../images_copy_init/Young'
+
+all_imgs = '../new_images_all'
+female_imgs = '../images_copy_new/Female'
+male_imgs = '../images_copy_new/Male'
+old_imgs = '../images_copy_new/Old'
+young_imgs = '../images_copy_new/Young'
 
 # _, (train_dataset, test_dataset) = preprocessing.pre_processing('../resized_images')
 _, (train_dataset, test_dataset) = preprocessing.pre_processing(all_imgs)
@@ -84,15 +90,16 @@ def k_fold():
     print("All scores ", scores)
 
     # aggregate values ?
-    print("Accuracy Mean ", (np.mean(scores['test_accuracy']))*100)
-    print("Precision Mean", (np.mean(scores['test_precision']))*100)
-    print("Recall Mean", (np.mean(scores['test_recall']))*100)
-    print("F1 Mean", (np.mean(scores['test_f1_score']))*100)
+    print("Accuracy Mean ", (np.mean(scores['test_accuracy'])) * 100)
+    print("Precision Mean", (np.mean(scores['test_precision'])) * 100)
+    print("Recall Mean", (np.mean(scores['test_recall'])) * 100)
+    print("F1 Mean", (np.mean(scores['test_f1_score'])) * 100)
 
 
 if __name__ == '__main__':
-    evaluation(female_imgs, train_datasetF, test_datasetF)
-    evaluation(male_imgs, train_datasetM, test_datasetM)
-    evaluation(old_imgs, train_datasetO, test_datasetO)
-    evaluation(young_imgs, train_datasetY, test_datasetY)
-    k_fold()
+    evaluation(all_imgs, train_dataset, test_dataset)
+    # evaluation(female_imgs, train_datasetF, test_datasetF)
+    # evaluation(male_imgs, train_datasetM, test_datasetM)
+    # evaluation(old_imgs, train_datasetO, test_datasetO)
+    # evaluation(young_imgs, train_datasetY, test_datasetY)
+    # k_fold()

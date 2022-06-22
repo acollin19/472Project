@@ -9,8 +9,8 @@ def training():
     # Parameters that can be tuned
     num_epochs = 50
     learning_rate = 0.001
-    loaders, _ = preprocessing.pre_processing('../resized_images')
-    # loaders, _ = preprocessing.pre_processing('../images_copy')
+    # loaders, _ = preprocessing.pre_processing('../new_images_all')
+    loaders, _ = preprocessing.pre_processing('../resized_images_init')
     train_loader, test_loader = loaders
 
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For Windows (will use cpu on macs)

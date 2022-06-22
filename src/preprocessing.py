@@ -6,7 +6,7 @@ import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
 
-img_folder = '../new_images'
+img_folder = '../new_images_all'
 
 # All images are 64x64 pixels
 img_size = (64, 64)
@@ -52,7 +52,7 @@ def resize_image(src_image):
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
-    resized_img = '../resized_new_images'
+    resized_img = '../resized_new_images_all'
     if os.path.exists(resized_img):
         shutil.rmtree(resized_img)
 
