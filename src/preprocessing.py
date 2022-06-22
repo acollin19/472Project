@@ -6,7 +6,7 @@ import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
 
-img_folder = '../images'
+img_folder = '../new_images'
 
 # All images are 64x64 pixels
 img_size = (64, 64)
@@ -24,6 +24,8 @@ def convert_to_jpeg():
         for directories in folders:
             file_names = os.listdir(os.path.join(root, directories))
             for file_name in file_names:
+                if '.DS_Store' in file_name:
+                    continue
                 file_path = os.path.join(root, directories, file_name)
                 if os.path.isfile(file_path):
                     if not file_path.endswith(".jpeg"):
@@ -47,7 +49,7 @@ def resize_image(src_image):
 
 # CREATE FOLDER FOR RESIZED IMGS IF IT DOESN'T EXIST
 def resize_save():
-    resized_img = '../resized_images'
+    resized_img = '../resized_new_images'
     if os.path.exists(resized_img):
         shutil.rmtree(resized_img)
 
@@ -61,6 +63,8 @@ def resize_save():
             file_names = os.listdir(os.path.join(root, directories))
             # Loop through all images
             for file_name in file_names:
+                if '.DS_Store' in file_name:
+                    continue
                 # Open the file in path
                 file_path = os.path.join(root, directories, file_name)
                 if os.path.isfile(file_path):

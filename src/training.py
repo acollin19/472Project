@@ -65,11 +65,11 @@ def cnn():
     # Parameters that can be tuned
     num_epochs = 50
     learning_rate = 0.001
-    loaders, _ = preprocessing.pre_processing('../resized_images')
+    loaders, _ = preprocessing.pre_processing('../resized_new_images')
     train_loader, test_loader = loaders
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
-    # device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For Windows (will use cpu on macs)
+    device = torch.device('mps' if torch.has_mps else 'cpu')  # For Mac (M1 Macs only with nightly version of pytorch)
     print("Device used to train the model: {device}".format(device=device))
 
     model = CNN().to(device)
