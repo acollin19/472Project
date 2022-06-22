@@ -34,8 +34,8 @@ if X.is_mps:
     X = X.cpu()
 Also a nightly version of pytorch is required
 """
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
-device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
+# device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
 
 modelB = CNN()
