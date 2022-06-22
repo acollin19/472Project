@@ -83,12 +83,10 @@ def k_fold():
     # k-fold
     train_sliceable = SliceDataset(train_dataset)
     kfold = KFold(n_splits=10, shuffle=True, random_state=10)
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
-    scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
+    scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring, n_jobs=-1)
     print("All scores ", scores)
 
-    # aggregate values ?
+    # aggregate values
     print("Accuracy Mean ", (np.mean(scores['test_accuracy'])) * 100)
     print("Precision Mean", (np.mean(scores['test_precision'])) * 100)
     print("Recall Mean", (np.mean(scores['test_recall'])) * 100)
