@@ -3,17 +3,13 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay, \
-    make_scorer, precision_score, recall_score, f1_score
+from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay
+from sklearn.model_selection import cross_val_score
 from skorch import NeuralNetClassifier
-from sklearn.model_selection import KFold, cross_val_score, cross_validate
 from skorch.helper import SliceDataset
 
 import preprocessing
-import training
-
-modelB = training.CNN()
-modelB.load_state_dict(torch.load('saved_model'), strict=False)
+from cnn import CNN
 
 all_imgs = '../images_copy'
 female_imgs = '../images_copy/Female'
@@ -29,10 +25,20 @@ _, (train_datasetO, test_datasetO) = preprocessing.pre_processing(old_imgs)
 _, (train_datasetY, test_datasetY) = preprocessing.pre_processing(young_imgs)
 
 torch.manual_seed(0)
-device = torch.device('cpu')
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
+
+"""
+In order to use mps on M1 Macs the following if statement needs to be added in the file skorch/utils.py around
+line 140 after the if X.is_cuda: X = X.cpu() statement
+if X.is_mps:
+    X = X.cpu()
+Also a nightly version of pytorch is required
+"""
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
 # device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
+
+modelB = CNN()
+modelB.load_state_dict(torch.load('saved_model', map_location=device), strict=False)
 
 net = NeuralNetClassifier(
     modelB,
@@ -55,6 +61,7 @@ def evaluation(img_path, train_data, test_data):
     y_true = np.array([y for x, y in iter(test_data)])
     accuracy_score(y_true, y_pred)
     print("Class", classification_report(y_true, y_pred, target_names=target_names))
+    # plot_confusion_matrix(net, test_dataset, y_true)
     ConfusionMatrixDisplay.from_estimator(net, test_data, y_true.reshape(-1, 1), display_labels=target_names)
     plt.show()
 
@@ -62,24 +69,15 @@ def evaluation(img_path, train_data, test_data):
 def k_fold():
     k_train = np.array([y for x, y in iter(train_dataset)])
     net.fit(train_dataset, y=k_train)
-    scoring = {'accuracy': make_scorer(accuracy_score),
-               'precision': make_scorer(precision_score, average='micro'),
-               'recall': make_scorer(recall_score, average='micro'),
-               'f1_score': make_scorer(f1_score, average='micro')}
     # k-fold
     train_sliceable = SliceDataset(train_dataset)
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=2, scoring=scoring)
-    # avg_scores = scores.mean()
-    scores = cross_validate(net, train_sliceable, k_train, cv=10, scoring=scoring)
-
-    print("All scores ", scores)
-
+    scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
+    print("scores ", scores)
 
 
 if __name__ == '__main__':
-    # evaluation(female_imgs, train_datasetF, test_datasetF)
-    # evaluation(male_imgs, train_datasetM, test_datasetM)
-    # evaluation(old_imgs, train_datasetO, test_datasetO)
-    # evaluation(young_imgs, train_datasetY, test_datasetY)
+    evaluation(female_imgs, train_datasetF, test_datasetF)
+    evaluation(male_imgs, train_datasetM, test_datasetM)
+    evaluation(old_imgs, train_datasetO, test_datasetO)
+    evaluation(young_imgs, train_datasetY, test_datasetY)
     k_fold()
