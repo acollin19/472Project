@@ -4,15 +4,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay
+from sklearn.model_selection import cross_val_score
 from skorch import NeuralNetClassifier
-from sklearn.model_selection import KFold, cross_val_score
 from skorch.helper import SliceDataset
 
 import preprocessing
 from cnn import CNN
-
-modelB = CNN()
-modelB.load_state_dict(torch.load('saved_model'), strict=False)
 
 all_imgs = '../images_copy'
 female_imgs = '../images_copy/Female'
@@ -39,6 +36,9 @@ Also a nightly version of pytorch is required
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # For windows (will use cpu on macs)
 # device = torch.device('mps' if torch.has_mps else 'cpu')  # For mac (M1 macs with nightly version of pytorch)
 print("Device used to compute the confusion matrix: {device}".format(device=device))
+
+modelB = CNN()
+modelB.load_state_dict(torch.load('saved_model', map_location=device), strict=False)
 
 net = NeuralNetClassifier(
     modelB,
