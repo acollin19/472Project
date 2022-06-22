@@ -91,8 +91,8 @@ def k_fold():
 
 
 if __name__ == '__main__':
-    # evaluation(female_imgs, train_datasetF, test_datasetF)
-    # evaluation(male_imgs, train_datasetM, test_datasetM)
-    # evaluation(old_imgs, train_datasetO, test_datasetO)
-    # evaluation(young_imgs, train_datasetY, test_datasetY)
+    evaluation(female_imgs, train_datasetF, test_datasetF)
+    evaluation(male_imgs, train_datasetM, test_datasetM)
+    evaluation(old_imgs, train_datasetO, test_datasetO)
+    evaluation(young_imgs, train_datasetY, test_datasetY)
     k_fold()
