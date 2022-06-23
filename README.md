@@ -40,7 +40,7 @@ Timothee Duthoit, ID: 40120801
 2. Run single_image_classification.py to classify a single image (change image path on line 43 to test different image)
 
 ### Application  
-2. Once the saved model is obtained...
+2. Once the saved model is obtained...(inside the trained_models folder -> move to src folder to run confmatrix.py)
 3. Run confmatrix.py which uses the model (modelB) obtained from training.py to obtain all parameters and the confusion matrix.  
 
 # Comp 472 Project Assignment, Part 2
@@ -75,7 +75,8 @@ AI Face Detector : Goal is to perform an evaluation for a possible bias of our A
 - single_img_classification.py : to classify a single image
 
 ## Running Instructions
-To run part 2 of the project, 
+To run part 2 of the project, (follow steps from part 1 first)
+Remember to move the saved_model (either new or old) from the trained_models to the src folder
 
 1. Run training.py to train the initial model
 2. Uncomment like 12 and 13 to train model with the new images (to eliminate bias)
