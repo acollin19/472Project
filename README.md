@@ -45,22 +45,24 @@ Timothee Duthoit, ID: 40120801
 
 # Comp 472 Project Assignment, Part 2
 
+AI Face Detector : Goal is to perform an evaluation for a possible bias of our AI and at least partially eliminate it as well as removing any issues that came up during part 1 of the project.
+
 ## Files Submitted
 
 ### Dataset
 
-- new_images_all : entire dataset with non-classified images
-- resized_images_init : resized entire dataset with non-classified images 
-  - ClothMask (532)
-  - N95Mask (449)
-  - NoMask (517)
-  - SurgicalMask (496)
 - images_copy_init : classified images into attributes
+- resized_images_init : 1994 total images resized entire dataset with non-classified images 
+  - ClothMask (532 images)
+  - N95Mask (449 images)
+  - NoMask (517 images)
+  - SurgicalMask (496 images)
+- new_images_all : entire dataset with non-classified images
 - images_copy_new : Resized the images into 64 x 64 pixels to standardize
   - Females (1209 images)
-  - Males N95 (1212)
-  - Old Surgical Mask (798)
-  - Young No Mask (1324)
+  - Males N95 (1212 images)
+  - Old Surgical Mask (798 images)
+  - Young No Mask (1324 images)
 
 ### Codes
 
