@@ -77,18 +77,16 @@ def k_fold():
 
     # macro or weighted
     scoring = {'accuracy': make_scorer(accuracy_score),
-               'precision': make_scorer(precision_score, average='weighted', zero_division=1),
-               'recall': make_scorer(recall_score, average='weighted', zero_division=1),
-               'f1_score': make_scorer(f1_score, average='weighted', zero_division=1)}
+               'precision': make_scorer(precision_score, average='macro', zero_division=1),
+               'recall': make_scorer(recall_score, average='macro', zero_division=1),
+               'f1_score': make_scorer(f1_score, average='macro', zero_division=1)}
     # k-fold
     train_sliceable = SliceDataset(train_dataset)
     kfold = KFold(n_splits=10, shuffle=True, random_state=10)
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=10, scoring="accuracy")
-    # scores = cross_val_score(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
     scores = cross_validate(net, train_sliceable, k_train, cv=kfold, scoring=scoring)
     print("All scores ", scores)
 
-    # aggregate values ?
+    # aggregate values
     print("Accuracy Mean ", (np.mean(scores['test_accuracy'])) * 100)
     print("Precision Mean", (np.mean(scores['test_precision'])) * 100)
     print("Recall Mean", (np.mean(scores['test_recall'])) * 100)
