@@ -66,19 +66,24 @@ Timothee Duthoit, ID: 40120801
 
 - preprocessing.py : Resizing, preprocessing, loading the data.
 - training.py : CNN architecture and training process
-- saved_model : where the trained model is stored
-- confmatrix.py : Evaluation of the model to get parameters (precision, recall, f1-measure, accuracy ) and confusion matrix.
+- saved_model : where the trained model is stored (using a nightly version of pytorch)
+- confmatrix.py : Evaluation of the model to get parameters (precision, recall, f1-measure, accuracy ) and confusion matrix as well as k-fold
 - cnn.py : class for cnn into separate file 
 - image_size_check.py : checking the sizes of the images
 - single_img_classification.py : to classify a single image
-- kfold : 
 
 ## Running Instructions
 To run part 2 of the project, 
 
 1. Run training.py to train the initial model
 2. Uncomment like 12 and 13 to train model with the new images (to eliminate bias)
+***
+In order to use mps on M1 Macs the following if statement needs to be added in the file skorch/utils.py around
+line 140 after the if X.is_cuda: X = X.cpu() statement
+if X.is_mps:
+    X = X.cpu()
+Also a nightly version of pytorch is required
+***
 3. To get all the confusion matrices for old model, comment OUT lines 21 - 25 in confmatrix.py and run file. 
 4. To get all the confusion matrices for new model, comment OUT lines 15 - 19 in confmatrix.py and run file.
-5. Run kfold
 
