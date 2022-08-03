@@ -3,9 +3,9 @@
 AI Face Detector : Goal is to develop and AI that can analyze face images and detect whether the person is wearing a face mask or not, as well as the type of mask being worn.  
 
 ## Group Members
-Angele Park Collin
-Clara Assouline
-Timothee Duthoit
+- Angele Park Collin,
+- Clara Assouline,
+- Timothee Duthoit
 
 ## Files Submitted
 
